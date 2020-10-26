@@ -1,7 +1,3 @@
-/* (C) Ryan Lin Xiang, 2020
-Created: 21/08/2020
-Last modified: 24/08/2020
-*/
 
 import React from "react";
 import {

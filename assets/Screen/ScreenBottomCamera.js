@@ -1,17 +1,16 @@
-/* (C) Ryan Lin Xiang, 2020
-Created: 21/08/2020
-Last modified: 24/08/2020
-*/
-
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text,Button } from "react-native";
 import * as tf from "@tensorflow/tfjs";
 import { fetch, bundleResourceIO } from "@tensorflow/tfjs-react-native";
 import Constants from "expo-constants";
+import { Camera } from 'expo-camera';
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import * as jpeg from "jpeg-js";
+import { Icon } from 'react-native-elements'
+
 import Output from "./Output";
+
 
 async function getPermissionAsync() {
   if (Constants.platform.ios) {
@@ -64,7 +63,7 @@ async function imageToTensor(source) {
   return expanded_img.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
 }
 
-export default function ScreenBottomCamera() {
+export default function ScreenBottomCamera() {  
   const [isTfReady, setTfReady] = useState(false); // gets and sets the Tensorflow.js module loading status
   const [model, setModel] = useState(null); // gets and sets the locally saved Tensorflow.js model
   const [image, setImage] = useState(null); // gets and sets the image selected from the user
@@ -103,6 +102,7 @@ export default function ScreenBottomCamera() {
         const imageTensor = await imageToTensor(source); // prepare the image
         const predictions = await model.predict(imageTensor); // send the image to the model
         setPredictions(predictions); // put model prediction to the state
+        console.log(predictions)
       }
     } catch (error) {
       setError(error);
@@ -145,10 +145,7 @@ export default function ScreenBottomCamera() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.innercontainer}>
-        <Text style={styles.status}>
-          {statusMessage} {showReset ? resetLink : null}
-        </Text>
+      <View style={styles.innercontainer}>        
         <TouchableOpacity
           style={styles.imageContainer}
           onPress={model && !predictions ? handlerSelectImage : () => {}} // Activates handler only if the model has been loaded and there are no predictions done yet
@@ -160,6 +157,21 @@ export default function ScreenBottomCamera() {
             error={error}
           />
         </TouchableOpacity>
+        <Text style={styles.status}>
+          {statusMessage} {showReset ? resetLink : null}
+        </Text>
+      </View>
+      <View style={styles.useCamera}>
+        <TouchableOpacity>
+          <Icon
+            raised
+            name='camera-retro'
+            type='font-awesome'
+            color='grey'
+            size='40'
+            onPress={()=> this.props.navigation.navigate('CameraScreen')}
+          />
+        </TouchableOpacity>        
       </View>
     </View>
   );
@@ -171,6 +183,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+  },
+  useCamera:{
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+
   },
   innercontainer: {
     marginTop: -50,

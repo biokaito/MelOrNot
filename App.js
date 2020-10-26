@@ -9,6 +9,7 @@ import {Ionicons} from '@expo/vector-icons';
 import HomeScreen from './assets/Screen/Home';
 import IntroScreen from './assets/Screen/Intro';
 import MainScreen from './assets/Screen/Main';
+import CameraScreen from './assets/Screen/Camera'
 
 import BottomTabHome from './assets/Screen/ScreenBottomHome';
 import BottomTabNews from './assets/Screen/ScreenBottomNews';
@@ -27,6 +28,7 @@ const tabNavigator = createBottomTabNavigator({
   }),
   Camera: createStackNavigator({
     Camera: BottomTabCamera,
+    CameraScreen: CameraScreen
   }),
   Chat: createStackNavigator({
     Chat: BottomTabChat,
