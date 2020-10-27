@@ -7,7 +7,8 @@ import { Camera } from 'expo-camera';
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import * as jpeg from "jpeg-js";
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick';
 
 import Output from "./Output";
 
@@ -76,8 +77,8 @@ export default function ScreenBottomCamera() {
       setTfReady(true); // set the state
 
       // bundle the model files and load the model:
-      const model = require("./Model/model.json");
-      const weights = require("./Model/weights.bin");
+      const model = require("./newModel/model.json");
+      const weights = require("./newModel/weights.bin");
       const loadedModel = await tf.loadGraphModel(
         bundleResourceIO(model, weights)
       );
@@ -102,7 +103,7 @@ export default function ScreenBottomCamera() {
         const imageTensor = await imageToTensor(source); // prepare the image
         const predictions = await model.predict(imageTensor); // send the image to the model
         setPredictions(predictions); // put model prediction to the state
-        console.log(predictions)
+        //console.log(predictions)
       }
     } catch (error) {
       setError(error);
@@ -117,9 +118,11 @@ export default function ScreenBottomCamera() {
 
   let status, statusMessage, showReset;
   const resetLink = (
-    <Text onPress={reset} style={styles.reset}>
-      Restart
-    </Text>
+    <View >
+      <Text onPress={reset} style={styles.reset}>
+          Prediction finished.
+      </Text>
+    </View>
   );
 
   if (!error) {
@@ -128,7 +131,7 @@ export default function ScreenBottomCamera() {
       statusMessage = "Model is ready.";
     } else if (model && image && predictions) {
       status = "finished";
-      statusMessage = "Prediction finished.";
+      //statusMessage = "Prediction finished.";
       showReset = true;
     } else if (model && image && !predictions) {
       status = "modelPredict";
@@ -157,8 +160,15 @@ export default function ScreenBottomCamera() {
             error={error}
           />
         </TouchableOpacity>
-        <Text style={styles.status}>
-          {statusMessage} {showReset ? resetLink : null}
+        <Text style={styles.status}>          
+          <AwesomeButtonRick 
+            type="secondary"
+            width={300}
+          >
+            <Text>
+              {statusMessage} {showReset ? resetLink : null}
+            </Text>
+          </AwesomeButtonRick>
         </Text>
       </View>
       <View style={styles.useCamera}>
@@ -195,8 +205,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  status: { marginBottom: 10 },
-  reset: { color: "blue" },
+  status: { 
+    marginTop: 30,
+  },
+  reset: { 
+    //color: "blue",
+  },
   imageContainer: {
     width: 300,
     height: 300,

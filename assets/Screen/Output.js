@@ -37,7 +37,7 @@ export default function Output(props) {
               Probability of melanoma:{" "}
             </Text>
             <Text style={styles.predictedNumber}>
-              {Math.round(predictions.dataSync()[0] * 100)}{" "}
+              {Math.round(predictions.dataSync()[0] * 100)}
               {/* convert tensor into array and access the first category probability*/}
               <Text style={styles.predictedNumberPercentage}> %</Text>
             </Text>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   predictedNumber: {
     fontSize: 64,
     fontWeight: "bold",
-    color: "darkorange",
+    color: "#cd0a0a",
     shadowOpacity: 0.75,
     shadowRadius: 5,
     shadowColor: "black",
