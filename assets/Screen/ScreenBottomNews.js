@@ -96,7 +96,7 @@ export default class ScreenBottomIntro extends React.Component{
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#deb887',
+        backgroundColor: "#f4f4f2",
     },
     shareArticle:{
         fontSize: 14,

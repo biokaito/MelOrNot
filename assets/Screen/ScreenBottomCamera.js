@@ -23,14 +23,14 @@ async function getPermissionAsync() {
 }
 
 async function imageToTensor(source) {
-  // load the raw data of the selected image into an array
+  //Load dữ liệu thô từ ảnh được select vào mảng
   const response = await fetch(source.uri, {}, { isBinary: true });
   const rawImageData = await response.arrayBuffer();
   const { width, height, data } = jpeg.decode(rawImageData, {
     useTArray: true, // Uint8Array = true
   });
 
-  // remove the alpha channel:
+  // loại bỏ alpha channel:
   const buffer = new Uint8Array(width * height * 3);
   let offset = 0;
   for (let i = 0; i < buffer.length; i += 3) {
@@ -40,51 +40,51 @@ async function imageToTensor(source) {
     offset += 4;
   }
 
-  // transform image data into a tensor
+  // chuyển đổi ảnh sang dạng tensor
   const img = tf.tensor3d(buffer, [width, height, 3]);
 
-  // calculate square center crop area
+  // tính toán cắt ảnh 
   const shorterSide = Math.min(width, height);
   const startingHeight = (height - shorterSide) / 2;
   const startingWidth = (width - shorterSide) / 2;
   const endingHeight = startingHeight + shorterSide;
   const endingWidth = startingWidth + shorterSide;
 
-  // slice and resize the image
+  // cắt và resize ảnh 224x224
   const sliced_img = img.slice(
     [startingWidth, startingHeight, 0],
     [endingWidth, endingHeight, 3]
   );
   const resized_img = tf.image.resizeBilinear(sliced_img, [224, 224]);
 
-  // add a fourth batch dimension to the tensor
+  // thêm demension thứ 4 vào tensor
   const expanded_img = resized_img.expandDims(0);
 
-  // normalise the rgb values to -1-+1
+  // chuẩn hóa các giá trị rgb thành -1-+1
   return expanded_img.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
 }
 
 export default function ScreenBottomCamera() {  
-  const [isTfReady, setTfReady] = useState(false); // gets and sets the Tensorflow.js module loading status
-  const [model, setModel] = useState(null); // gets and sets the locally saved Tensorflow.js model
-  const [image, setImage] = useState(null); // gets and sets the image selected from the user
-  const [predictions, setPredictions] = useState(null); // gets and sets the predicted value from the model
-  const [error, setError] = useState(false); // gets and sets any errors
+  const [isTfReady, setTfReady] = useState(false); 
+  const [model, setModel] = useState(null); 
+  const [image, setImage] = useState(null); 
+  const [predictions, setPredictions] = useState(null); 
+  const [error, setError] = useState(false); 
 
   useEffect(() => {
     (async () => {
-      await tf.ready(); // wait for Tensorflow.js to get ready
-      setTfReady(true); // set the state
+      await tf.ready(); 
+      setTfReady(true); 
 
-      // bundle the model files and load the model:
+      // khai báo và load model custom
       const model = require("./newModel/model.json");
       const weights = require("./newModel/weights.bin");
       const loadedModel = await tf.loadGraphModel(
         bundleResourceIO(model, weights)
       );
 
-      setModel(loadedModel); // load the model to the state
-      getPermissionAsync(); // get the permission for camera roll access for iOS users
+      setModel(loadedModel); 
+      getPermissionAsync(); 
     })();
   }, []);
 
@@ -93,16 +93,16 @@ export default function ScreenBottomCamera() {
       let response = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true, // on Android user can rotate and crop the selected image; iOS users can only crop
-        quality: 1, // go for highest quality possible
-        aspect: [4, 3], // maintain aspect ratio of the crop area on Android; on iOS crop area is always a square
+        quality: 1, // Chất lượng ảnh cao nhất
+        aspect: [4, 3], // duy trì tỷ lệ chuẩn
       });
 
       if (!response.cancelled) {
         const source = { uri: response.uri };
-        setImage(source); // put image path to the state
-        const imageTensor = await imageToTensor(source); // prepare the image
+        setImage(source); 
+        const imageTensor = await imageToTensor(source); 
         const predictions = await model.predict(imageTensor); // send the image to the model
-        setPredictions(predictions); // put model prediction to the state
+        setPredictions(predictions); 
         //console.log(predictions)
       }
     } catch (error) {
@@ -189,7 +189,7 @@ export default function ScreenBottomCamera() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f4f4f2",
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
@@ -212,15 +212,15 @@ const styles = StyleSheet.create({
     //color: "blue",
   },
   imageContainer: {
-    width: 300,
+    width: 350,
     height: 300,
     borderRadius: 20,
     opacity: 0.7,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "lightgrey",
-    borderColor: "white",
-    borderWidth: 3,
+    borderColor: "#495464",
+    borderWidth: 4,
     borderStyle: "dotted",
   },
 });

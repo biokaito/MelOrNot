@@ -38,7 +38,7 @@ export default function Output(props) {
             </Text>
             <Text style={styles.predictedNumber}>
               {Math.round(predictions.dataSync()[0] * 100)}
-              {/* convert tensor into array and access the first category probability*/}
+              {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
               <Text style={styles.predictedNumberPercentage}> %</Text>
             </Text>
           </View>
@@ -57,10 +57,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  placeholder: { fontSize: 50 },
-  predictedImageExtras: { borderRadius: 20 },
-  predictedNumberHeader: { fontSize: 12, color: "white" },
-  predictedNumberPercentage: { fontSize: 24, color: "white" },
+  placeholder: { 
+    fontSize: 50 
+  },
+  predictedImageExtras: { 
+    borderRadius: 20 
+  },
+  predictedNumberHeader: { 
+    fontSize: 12, 
+    color: "white" 
+  },
+  predictedNumberPercentage: { 
+    fontSize: 24, 
+    color: "white" 
+  },
   predictedNumber: {
     fontSize: 64,
     fontWeight: "bold",
@@ -68,6 +78,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.75,
     shadowRadius: 5,
     shadowColor: "black",
-    shadowOffset: { height: 10, width: 10 },
+    shadowOffset: { 
+      height: 10, 
+      width: 10 
+    },
   },
 });
