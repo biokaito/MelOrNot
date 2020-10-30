@@ -38,6 +38,7 @@ export default function Output(props) {
             </Text>
             <Text style={styles.predictedNumber}>
               {Math.round(predictions.dataSync()[0] * 100)}
+              {/*Math.round(predictions.dataSync()[1] * 100)*/}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
               <Text style={styles.predictedNumberPercentage}> %</Text>
             </Text>
@@ -64,15 +65,18 @@ const styles = StyleSheet.create({
     borderRadius: 20 
   },
   predictedNumberHeader: { 
-    fontSize: 12, 
-    color: "white" 
+    marginTop: 20,
+    fontSize: 20, 
+    color: "white" ,
+    fontStyle: 'italic'
   },
   predictedNumberPercentage: { 
-    fontSize: 24, 
-    color: "white" 
+    fontSize: 34, 
+    color: "white",
+    fontStyle: 'italic'
   },
   predictedNumber: {
-    fontSize: 64,
+    fontSize: 74,
     fontWeight: "bold",
     color: "#cd0a0a",
     shadowOpacity: 0.75,

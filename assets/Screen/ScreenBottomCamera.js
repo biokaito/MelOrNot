@@ -118,11 +118,9 @@ export default function ScreenBottomCamera() {
 
   let status, statusMessage, showReset;
   const resetLink = (
-    <View >
       <Text onPress={reset} style={styles.reset}>
           Prediction finished.
       </Text>
-    </View>
   );
 
   if (!error) {
@@ -163,7 +161,7 @@ export default function ScreenBottomCamera() {
         <Text style={styles.status}>          
           <AwesomeButtonRick 
             type="secondary"
-            width={300}
+            width={250}
           >
             <Text>
               {statusMessage} {showReset ? resetLink : null}
@@ -172,16 +170,17 @@ export default function ScreenBottomCamera() {
         </Text>
       </View>
       <View style={styles.useCamera}>
-        <TouchableOpacity>
+        <Text style={styles.shadowIcon}>
           <Icon
             raised
             name='camera-retro'
             type='font-awesome'
             color='grey'
-            size='40'
-            onPress={()=> this.props.navigation.navigate('CameraScreen')}
+            size={24}           
+            onPress={()=> alert(" Hế lô hê hê hê")}
+            
           />
-        </TouchableOpacity>        
+        </Text>        
       </View>
     </View>
   );
@@ -193,6 +192,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+  },
+  shadowIcon:{
+    shadowOpacity: 2,
+    textShadowRadius: 3,
+    textShadowOffset: { 
+      width: 1, 
+      height: 3 
+    }
   },
   useCamera:{
     position: 'absolute',
