@@ -82,12 +82,13 @@ export default function ScreenBottomCamera() {
       const loadedModel = await tf.loadGraphModel(
         bundleResourceIO(model, weights)
       );
-
+      loadedModel.summary();
       setModel(loadedModel); 
       getPermissionAsync(); 
     })();
+    //console.log(model.summary())
   }, []);
-
+  
   async function handlerSelectImage() {
     try {
       let response = await ImagePicker.launchImageLibraryAsync({

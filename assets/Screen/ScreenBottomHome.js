@@ -108,7 +108,7 @@ export default function ScreenBottomHome() {
 var styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: "#f4f4f2",
     },
     flatlistImage:{
         width: 150,
