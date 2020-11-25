@@ -77,12 +77,11 @@ export default function ScreenBottomCamera() {
       setTfReady(true); 
 
       // khai báo và load model custom
-      const model = require("./newModel/model.json");
-      const weights = require("./newModel/weights.bin");
-      const loadedModel = await tf.loadGraphModel(
+      const model = require("./Model/NewModel1/model.json");
+      const weights = require("./Model/NewModel1/weights.bin");
+      const loadedModel = await tf.loadLayersModel(
         bundleResourceIO(model, weights)
       );
-      loadedModel.summary();
       setModel(loadedModel); 
       getPermissionAsync(); 
     })();

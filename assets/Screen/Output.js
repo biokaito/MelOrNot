@@ -38,7 +38,24 @@ export default function Output(props) {
             </Text>
             <Text style={styles.predictedNumber}>
               {Math.round(predictions.dataSync()[0] * 100)}
-              {/*Math.round(predictions.dataSync()[1] * 100)*/}
+              {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
+              <Text style={styles.predictedNumberPercentage}> %</Text>
+              {Math.round(predictions.dataSync()[1] * 100)}
+              {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
+              <Text style={styles.predictedNumberPercentage}> %</Text>
+              {Math.round(predictions.dataSync()[2] * 100)}
+              {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
+              <Text style={styles.predictedNumberPercentage}> %</Text>
+              {Math.round(predictions.dataSync()[3] * 100)}
+              {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
+              <Text style={styles.predictedNumberPercentage}> %</Text>
+              {Math.round(predictions.dataSync()[4] * 100)}
+              {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
+              <Text style={styles.predictedNumberPercentage}> %</Text>
+              {Math.round(predictions.dataSync()[5] * 100)}
+              {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
+              <Text style={styles.predictedNumberPercentage}> %</Text>
+              {Math.round(predictions.dataSync()[6] * 100)}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](melanoma)*/}
               <Text style={styles.predictedNumberPercentage}> %</Text>
             </Text>
