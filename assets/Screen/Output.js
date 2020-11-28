@@ -1,4 +1,5 @@
 
+import { model } from "@tensorflow/tfjs";
 import React from "react";
 import {
   StyleSheet,
@@ -34,30 +35,31 @@ export default function Output(props) {
             }}
           >
             <Text style={styles.predictedNumberHeader}>
-              Probability of melanoma:{" "}
+              Probability :{" "}
             </Text>
             <Text style={styles.predictedNumber}>
-              {Math.round(predictions.dataSync()[0] * 100)}
+              {Math.round(predictions.dataSync()[0] * 100)} 
+              {/*console.log(predictions.dataSync())*/}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [0](akiec)*/}
-              <Text style={styles.predictedNumberPercentage}> %</Text>
+              <Text style={styles.predictedNumberPercentage}> % akiec</Text>{"\n"}
               {Math.round(predictions.dataSync()[1] * 100)}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [1](bcc)*/}
-              <Text style={styles.predictedNumberPercentage}> %</Text>
+              <Text style={styles.predictedNumberPercentage}> % bcc</Text>{"\n"}
               {Math.round(predictions.dataSync()[2] * 100)}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [2](bkl)*/}
-              <Text style={styles.predictedNumberPercentage}> %</Text>
+              <Text style={styles.predictedNumberPercentage}> % bkl</Text>{"\n"}
               {Math.round(predictions.dataSync()[3] * 100)}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [3](df)*/}
-              <Text style={styles.predictedNumberPercentage}> %</Text>
+              <Text style={styles.predictedNumberPercentage}> % df</Text>{"\n"}
               {Math.round(predictions.dataSync()[4] * 100)}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [4](melanoma)*/}
-              <Text style={styles.predictedNumberPercentage}> %</Text>
+              <Text style={styles.predictedNumberPercentage}> % melanoma</Text>{"\n"}
               {Math.round(predictions.dataSync()[5] * 100)}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [5](nv)*/}
-              <Text style={styles.predictedNumberPercentage}> %</Text>
+              <Text style={styles.predictedNumberPercentage}> % nv</Text>{"\n"}
               {Math.round(predictions.dataSync()[6] * 100)}
               {/* chuyển đổi tensor thành mảng và truy cập vào xác suất của đối tượng thứ [6](vasc)*/}
-              <Text style={styles.predictedNumberPercentage}> %</Text>
+              <Text style={styles.predictedNumberPercentage}> % vasc</Text>
             </Text>
           </View>
         </ImageBackground>
@@ -88,12 +90,12 @@ const styles = StyleSheet.create({
     fontStyle: 'italic'
   },
   predictedNumberPercentage: { 
-    fontSize: 34, 
+    fontSize: 20, 
     color: "white",
     fontStyle: 'italic'
   },
   predictedNumber: {
-    fontSize: 74,
+    fontSize: 25, //74
     fontWeight: "bold",
     color: "#cd0a0a",
     shadowOpacity: 0.75,

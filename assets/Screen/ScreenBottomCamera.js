@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TouchableOpacity, Text,Button } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text,Button,FlatList, Image, ImageBackground } from "react-native";
 import * as tf from "@tensorflow/tfjs";
 import { fetch, bundleResourceIO } from "@tensorflow/tfjs-react-native";
+import { BlurView } from "@react-native-community/blur";
 import Constants from "expo-constants";
 import { Camera } from 'expo-camera';
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import { withNavigation } from 'react-navigation';
 import * as jpeg from "jpeg-js";
 import { Icon } from 'react-native-elements';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick';
 
 import Output from "./Output";
+
 
 
 async function getPermissionAsync() {
@@ -71,6 +74,58 @@ export default function ScreenBottomCamera() {
   const [predictions, setPredictions] = useState(null); 
   const [error, setError] = useState(false); 
 
+  const [definitions,setdefinitions] = useState([
+    {   
+      acronym: 'akiec',
+      image : require("../src/images/caugh.png"),
+      title : 'Actinic Keratoses and intraepithelial Carcinoma',
+      id : '1',
+      content: 'Actinic Keratoses (Solar Keratoses) and intraepithelial Carcinoma (Bowen’s disease) are common non-invasive, variants of squamous cell car- cinoma that can be treated locally without surgery. Some authors regard them as precursors of squamous cell carcinomas and not as actual carci- nomas. There is, however, agreement that these lesions may progress to invasive squamous cell carcinoma - which is usually not pigmented. Both neoplasms commonly show surface scaling and commonly are devoid of pigment. Actinic keratoses are more common on the face and Bowenâ€™s disease is more common on other body sites. Because both types are in- duced by UV-light the surrounding skin is usually typified by severe sun damaged except in cases of Bowen’s disease that are caused by human papilloma virus infection and not by UV.'
+    },
+    {
+      acronym: 'bcc',
+      image : require("../src/images/caugh.png"),
+      title : 'Basal Cell Carcinoma',
+      id : '2',
+      content: 'Basal cell carcinoma is a common variant of epithelial skin cancer that rarely metastasizes but grows destructively if untreated. It appears in different morphologic variants (flat, nodular, pigmented, cystic).'
+    },
+    {
+      acronym: 'bkl',
+      image : require("../src/images/caugh.png"),
+      title : 'Benign Keratosis',
+      id : '3',
+      content: '"Benign keratosis" is a generic class that includes seborrheic keratoses ("senile wart"), solar lentigo - which can be regarded a flat variant of seborrheic keratosis - and lichen-planus like keratoses (LPLK), which corresponds to a seborrheic keratosis or a solar lentigo with inflammation and regression. The three subgroups may look different dermatoscopically, but we grouped them together because they are similar biologically and often reported under the same generic term histopathologically. From a dermatoscopic view, lichen planus-like keratoses are especially challenging because they can show morphologic features mimicking melanoma and are often biopsied or excised for diagnostic reasons. The dermatoscopic appearance of seborrheic keratoses varies according to anatomic site and type.'
+    },
+    {
+      acronym: 'df',
+      image : require("../src/images/caugh.png"),
+      title : 'Dermatofibroma',
+      id : '4',
+      content: 'Dermatofibroma is a benign skin lesion regarded as either a benign proliferation or an inflammatory reaction to minimal trauma. The most common dermatoscopic presentation is reticular lines at the periphery with a central white patch denoting fibrosis.'
+    },
+    {
+      acronym: 'mel',
+      image : require("../src/images/caugh.png"),
+      title : 'Melanoma',
+      id : '5',
+      content: 'Melanoma is a malignant neoplasm derived from melanocytes that may appear in different variants. If excised in an early stage it can be cured by simple surgical excision. Melanomas can be invasive or noninvasive (in situ). We included all variants of melanoma including melanoma in situ, but did exclude non-pigmented, subungual, ocular or mucosal melanoma. Melanomas are usually, albeit not always, chaotic, and some melanoma specific criteria depend on anatomic site.'
+    },
+    {
+      acronym: 'nv',
+      image : require("../src/images/caugh.png"),
+      title : 'Melanocytic Nevi',
+      id : '6',
+      content:'Melanocytic nevi are benign neoplasms of melanocytes and appear in a myriad of variants, which all are included in our series. The variants may differ significantly from a dermatoscopic point of view. In contrast to melanoma they are usually symmetric with regard to the distribution of color and structure.'
+    },
+    {
+      acronym: 'vasc',
+      image : require("../src/images/caugh.png"),
+      title : 'Vascular Lesions',
+      id : '7',
+      content: 'Vascular skin lesions in the dataset range from cherry angiomas to angiokeratomas and pyogenic granulomas. Hemorrhage is also included in this category. Angiomas are dermatoscopically characterized by red or purple color and solid, well circumscribed structures known as red clods or lacunes.'
+    },
+])
+
   useEffect(() => {
     (async () => {
       await tf.ready(); 
@@ -85,7 +140,6 @@ export default function ScreenBottomCamera() {
       setModel(loadedModel); 
       getPermissionAsync(); 
     })();
-    //console.log(model.summary())
   }, []);
   
   async function handlerSelectImage() {
@@ -143,9 +197,10 @@ export default function ScreenBottomCamera() {
     showReset = true;
     console.log(error);
   }
+ 
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}>        
       <View style={styles.innercontainer}>        
         <TouchableOpacity
           style={styles.imageContainer}
@@ -169,18 +224,38 @@ export default function ScreenBottomCamera() {
           </AwesomeButtonRick>
         </Text>
       </View>
-      <View style={styles.useCamera}>
-        <Text style={styles.shadowIcon}>
-          <Icon
-            raised
-            name='camera-retro'
-            type='font-awesome'
-            color='grey'
-            size={24}           
-            onPress={()=> alert(" Hế lô hê hê hê")}
+      <Button
+        title="GIGI"
+        onPress={()=>this.props.snavigation.navigate("HomeScreen")}
+      >
+      </Button>
+      <View style={styles.Definitions}>
+        <Text>Definitions: </Text>
+        <View>
+          <FlatList
+            horizontal={true}
+            data={definitions}
+            renderItem={({item})=>{
+              return(
+                <View style={styles.flatList}>
+                  <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate("HomeScreen",{
+                      definitions: item
+                    })}                  
+                  >
+                    <Image 
+                      source={item.image}
+                      style={styles.flatlistImage}
+                    />
+                    <Text style={styles.flatlistTitle}>{item.acronym}</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            }}
+          >
             
-          />
-        </Text>        
+          </FlatList>
+        </View>        
       </View>
     </View>
   );
@@ -193,6 +268,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
   },
+  flatList:{
+    padding: 4,
+    marginBottom: 0
+  },
+  flatlistImage:{
+    height: 40,
+    width: 40,
+    marginRight: 20
+  },
+  flatlistTitle:{
+    position: 'absolute',
+    marginTop: 4,
+    fontSize: 14,
+    left: 10,
+    bottom: 10
+},
   shadowIcon:{
     shadowOpacity: 2,
     textShadowRadius: 3,
@@ -201,11 +292,9 @@ const styles = StyleSheet.create({
       height: 3 
     }
   },
-  useCamera:{
+  Definitions:{
     position: 'absolute',
-    bottom: 0,
-    right: 0,
-
+    bottom: 20
   },
   innercontainer: {
     marginTop: -50,
@@ -230,4 +319,18 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderStyle: "dotted",
   },
+  flatlistImage:{
+    width: 50,
+    height: 100,
+    marginRight: 0,
+    borderRadius: 20
+},
+flatlistTitle:{
+    position: 'absolute',
+    color: 'white',
+    marginTop: 4,
+    fontSize: 14,
+    left: 10,
+    bottom: 10
+},
 });
