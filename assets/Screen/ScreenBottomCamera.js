@@ -67,7 +67,7 @@ async function imageToTensor(source) {
   return expanded_img.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
 }
 
-export default function ScreenBottomCamera() {  
+export default function ScreenBottomCamera({navigation}) {  
   const [isTfReady, setTfReady] = useState(false); 
   const [model, setModel] = useState(null); 
   const [image, setImage] = useState(null); 
@@ -77,49 +77,56 @@ export default function ScreenBottomCamera() {
   const [definitions,setdefinitions] = useState([
     {   
       acronym: 'akiec',
-      image : require("../src/images/caugh.png"),
+      image : require("../src/images/knowlegde.png"),
+      sampleImage : require("../src/images/akiec.jpg"),
       title : 'Actinic Keratoses and intraepithelial Carcinoma',
       id : '1',
       content: 'Actinic Keratoses (Solar Keratoses) and intraepithelial Carcinoma (Bowen’s disease) are common non-invasive, variants of squamous cell car- cinoma that can be treated locally without surgery. Some authors regard them as precursors of squamous cell carcinomas and not as actual carci- nomas. There is, however, agreement that these lesions may progress to invasive squamous cell carcinoma - which is usually not pigmented. Both neoplasms commonly show surface scaling and commonly are devoid of pigment. Actinic keratoses are more common on the face and Bowenâ€™s disease is more common on other body sites. Because both types are in- duced by UV-light the surrounding skin is usually typified by severe sun damaged except in cases of Bowen’s disease that are caused by human papilloma virus infection and not by UV.'
     },
     {
       acronym: 'bcc',
-      image : require("../src/images/caugh.png"),
+      image : require("../src/images/knowlegde.png"),
+      sampleImage : require("../src/images/bcc.jpg"),
       title : 'Basal Cell Carcinoma',
       id : '2',
       content: 'Basal cell carcinoma is a common variant of epithelial skin cancer that rarely metastasizes but grows destructively if untreated. It appears in different morphologic variants (flat, nodular, pigmented, cystic).'
     },
     {
       acronym: 'bkl',
-      image : require("../src/images/caugh.png"),
+      image : require("../src/images/knowlegde.png"),
+      sampleImage : require("../src/images/bkl.jpg"),
       title : 'Benign Keratosis',
       id : '3',
       content: '"Benign keratosis" is a generic class that includes seborrheic keratoses ("senile wart"), solar lentigo - which can be regarded a flat variant of seborrheic keratosis - and lichen-planus like keratoses (LPLK), which corresponds to a seborrheic keratosis or a solar lentigo with inflammation and regression. The three subgroups may look different dermatoscopically, but we grouped them together because they are similar biologically and often reported under the same generic term histopathologically. From a dermatoscopic view, lichen planus-like keratoses are especially challenging because they can show morphologic features mimicking melanoma and are often biopsied or excised for diagnostic reasons. The dermatoscopic appearance of seborrheic keratoses varies according to anatomic site and type.'
     },
     {
       acronym: 'df',
-      image : require("../src/images/caugh.png"),
+      image : require("../src/images/knowlegde.png"),
+      sampleImage : require("../src/images/df.jpg"),
       title : 'Dermatofibroma',
       id : '4',
       content: 'Dermatofibroma is a benign skin lesion regarded as either a benign proliferation or an inflammatory reaction to minimal trauma. The most common dermatoscopic presentation is reticular lines at the periphery with a central white patch denoting fibrosis.'
     },
     {
       acronym: 'mel',
-      image : require("../src/images/caugh.png"),
+      image : require("../src/images/knowlegde.png"),
+      sampleImage : require("../src/images/mel.jpg"),
       title : 'Melanoma',
       id : '5',
       content: 'Melanoma is a malignant neoplasm derived from melanocytes that may appear in different variants. If excised in an early stage it can be cured by simple surgical excision. Melanomas can be invasive or noninvasive (in situ). We included all variants of melanoma including melanoma in situ, but did exclude non-pigmented, subungual, ocular or mucosal melanoma. Melanomas are usually, albeit not always, chaotic, and some melanoma specific criteria depend on anatomic site.'
     },
     {
       acronym: 'nv',
-      image : require("../src/images/caugh.png"),
+      image : require("../src/images/knowlegde.png"),
+      sampleImage : require("../src/images/nv.jpg"),
       title : 'Melanocytic Nevi',
       id : '6',
       content:'Melanocytic nevi are benign neoplasms of melanocytes and appear in a myriad of variants, which all are included in our series. The variants may differ significantly from a dermatoscopic point of view. In contrast to melanoma they are usually symmetric with regard to the distribution of color and structure.'
     },
     {
       acronym: 'vasc',
-      image : require("../src/images/caugh.png"),
+      image : require("../src/images/knowlegde.png"),
+      sampleImage : require("../src/images/vasc.jpg"),
       title : 'Vascular Lesions',
       id : '7',
       content: 'Vascular skin lesions in the dataset range from cherry angiomas to angiokeratomas and pyogenic granulomas. Hemorrhage is also included in this category. Angiomas are dermatoscopically characterized by red or purple color and solid, well circumscribed structures known as red clods or lacunes.'
@@ -224,13 +231,8 @@ export default function ScreenBottomCamera() {
           </AwesomeButtonRick>
         </Text>
       </View>
-      <Button
-        title="GIGI"
-        onPress={()=>this.props.snavigation.navigate("HomeScreen")}
-      >
-      </Button>
       <View style={styles.Definitions}>
-        <Text>Definitions: </Text>
+      <Text style={{ marginLeft: 4,fontFamily: "Roboto-Bold", fontSize: 18, color: "black" }}>Definitions:</Text>
         <View>
           <FlatList
             horizontal={true}
@@ -239,7 +241,7 @@ export default function ScreenBottomCamera() {
               return(
                 <View style={styles.flatList}>
                   <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate("HomeScreen",{
+                    onPress={()=>navigation.navigate("Definitions",{
                       definitions: item
                     })}                  
                   >
@@ -270,20 +272,8 @@ const styles = StyleSheet.create({
   },
   flatList:{
     padding: 4,
-    marginBottom: 0
+    marginBottom: 0,
   },
-  flatlistImage:{
-    height: 40,
-    width: 40,
-    marginRight: 20
-  },
-  flatlistTitle:{
-    position: 'absolute',
-    marginTop: 4,
-    fontSize: 14,
-    left: 10,
-    bottom: 10
-},
   shadowIcon:{
     shadowOpacity: 2,
     textShadowRadius: 3,
@@ -323,14 +313,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 100,
     marginRight: 0,
-    borderRadius: 20
 },
 flatlistTitle:{
     position: 'absolute',
-    color: 'white',
+    color: 'black',
+    fontWeight: 'bold',
     marginTop: 4,
     fontSize: 14,
-    left: 10,
-    bottom: 10
+    left: "25%",
+    bottom: 0
 },
 });

@@ -13,7 +13,7 @@ import { FlatList, TouchableHighlight, TouchableOpacity } from "react-native-ges
 
 const image = { uri: "https://images.pexels.com/photos/227417/pexels-photo-227417.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" };
 
-export default function ScreenBottomHome() {
+const ScreenBottomHome = ({navigation}) => {
     const [gallery,setgallery] = useState([
         {
             image : require("../src/images/1.png"),
@@ -102,7 +102,7 @@ export default function ScreenBottomHome() {
                 </View>
                 <Button
                         title="GIGI"
-                        onPress={()=>this.props.navigation.navigate("HomeScreen")}
+                        onPress={()=>navigation.navigate("HomeScreen")}
                     >                        
                     </Button>
             </View>
@@ -175,3 +175,4 @@ var styles = StyleSheet.create({
         color: 'white'
     }
 })
+export default ScreenBottomHome;

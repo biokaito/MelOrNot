@@ -10,7 +10,7 @@ import HomeScreen from './assets/Screen/Home';
 import IntroScreen from './assets/Screen/Intro';
 import MainScreen from './assets/Screen/Main';
 import CameraScreen from './assets/Screen/Camera'
-import DifinitionScreen from './assets/Screen/Difinitionsdetails'
+import DefinitionScreen from './assets/Screen/Definitionsdetails'
 
 import BottomTabHome from './assets/Screen/ScreenBottomHome';
 import BottomTabNews from './assets/Screen/ScreenBottomNews';
@@ -28,7 +28,7 @@ const tabNavigator = createBottomTabNavigator({
   }),
   Camera: createStackNavigator({
     Camera: BottomTabCamera,
-    HomeScreen: HomeScreen
+    Definitions: DefinitionScreen
   }),
   Chat: createStackNavigator({
     Chat: BottomTabChat,
