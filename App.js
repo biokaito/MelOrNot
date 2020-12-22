@@ -11,6 +11,11 @@ import IntroScreen from './assets/Screen/Intro';
 import MainScreen from './assets/Screen/Main';
 import CameraScreen from './assets/Screen/Camera'
 import DefinitionScreen from './assets/Screen/Definitionsdetails'
+import Cana from './assets/Questions/Cana'
+import Howis from './assets/Questions/Howis'
+import Howoften from './assets/Questions/Howoften'
+import Whatskin from './assets/Questions/Whatskin'
+import Whyshould from './assets/Questions/Whyshould'
 
 import BottomTabHome from './assets/Screen/ScreenBottomHome';
 import BottomTabNews from './assets/Screen/ScreenBottomNews';
@@ -21,7 +26,13 @@ import BottomTabUser from './assets/Screen/ScreenBottomUser';
 const tabNavigator = createBottomTabNavigator({
   Home: createStackNavigator({
     Home: BottomTabHome,
-    HomeScreen: HomeScreen
+    HomeScreen: HomeScreen,
+    Can: Cana,
+    How: Howis,
+    Regularly: Howoften,
+    What: Whatskin,
+    Why: Whyshould,
+
   }),
   News: createStackNavigator({
     News: BottomTabNews,

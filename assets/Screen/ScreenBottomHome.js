@@ -9,7 +9,8 @@ Image,
 Button
 } from "react-native";
 import { Icon } from 'react-native-elements';
-import { FlatList, TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList, ScrollView, TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
+import AntDesign from '@expo/vector-icons/AntDesign'
 
 const image = { uri: "https://images.pexels.com/photos/227417/pexels-photo-227417.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" };
 
@@ -71,40 +72,75 @@ const ScreenBottomHome = ({navigation}) => {
                         </View>
                     </ImageBackground>
                 </View>
-                <View>
-                    <FlatList
-                        horizontal={true}
-                        data={gallery}
-                        renderItem={({item}) => {
-                            return(
-                                <View style={styles.flatlistImageWrapper}>
-                                    <TouchableOpacity>
-                                        <Image 
-                                        source={item.image}
-                                        style={styles.flatlistImage}
-                                        />
-                                        <View style={styles.imageOverlay}></View>                                        
-                                        <Text style={styles.flatlistTitle}>
-                                            {<Icon
-                                                name='podcast'
-                                                type='font-awesome'
-                                                color='white'
-                                                size={16}           
-                                            />}{" "}
-                                        {item.title}
-                                        </Text>
-                                    </TouchableOpacity>
+                <ScrollView style={styles.bodyContainer}>
+                    <View>
+                        <FlatList
+                            horizontal={true}
+                            data={gallery}
+                            renderItem={({item}) => {
+                                return(
+                                    <View style={styles.flatlistImageWrapper}>
+                                        <TouchableOpacity>
+                                            <Image 
+                                            source={item.image}
+                                            style={styles.flatlistImage}
+                                            />
+                                            <View style={styles.imageOverlay}></View>                                        
+                                            <Text style={styles.flatlistTitle}>
+                                                {<Icon
+                                                    name='podcast'
+                                                    type='font-awesome'
+                                                    color='white'
+                                                    size={16}           
+                                                />}{" "}
+                                            {item.title}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            }}
+                        >                    
+                        </FlatList>
+                        </View>
+                        <View>
+                            <Text style={styles.titleQuestion}>Learn</Text>
+                            <TouchableOpacity onPress={()=>navigation.navigate("Why")}>
+                                <View style={styles.questionContainer}>
+                                    <Text style={styles.questionText}>Why should you keep an eye on your skin?</Text>
+                                    <AntDesign name="right" size={20}/>
                                 </View>
-                            )
-                        }}
-                    >                    
-                    </FlatList>
-                </View>
-                <Button
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>navigation.navigate("Can")}>
+                                <View style={styles.questionContainer}>
+                                    <Text style={styles.questionText}>Can a smartphone app diagnose melanoma skin cancer?</Text>
+                                    <AntDesign name="right" size={20}/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>navigation.navigate("How")}>
+                                <View style={styles.questionContainer}>
+                                    <Text style={styles.questionText}>How is melanoma skin cancer diagnosed?</Text>
+                                    <AntDesign name="right" size={20}/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>navigation.navigate("What")}>
+                                <View style={styles.questionContainer}>
+                                    <Text style={styles.questionText}>What skin cancer risk factors should you be aware of?</Text>
+                                    <AntDesign name="right" size={20}/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>navigation.navigate("Regularly")}>
+                                <View style={styles.questionContainer}>
+                                    <Text style={styles.questionText}>How often should you keep an eye on your skin?</Text>
+                                    <AntDesign name="right" size={20}/>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    {/*<Button
                         title="GIGI"
                         onPress={()=>navigation.navigate("HomeScreen")}
                     >                        
-                    </Button>
+                    </Button>*/}
+                </ScrollView>
             </View>
         )
 }
@@ -114,9 +150,29 @@ var styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#f4f4f2",
     },
+    titleQuestion:{
+        color: 'black',
+        fontSize: 20,
+        marginLeft: 20,
+        fontWeight: 'bold'
+    },
+    questionContainer:{
+        flexDirection: 'row',
+        borderBottomColor: 'gray',
+        borderBottomWidth: 0.5,
+        padding: 20,
+        alignItems: 'center'
+    },
+    questionText:{
+        color:'gray',
+        marginRight: 45
+    },
+    bodyContainer:{
+        height: 390,
+    },
     flatlistImage:{
-        width: 150,
-        height: 250,
+        width: 130,
+        height: 200,
         marginRight: 0,
         borderRadius: 20
     },
@@ -129,8 +185,8 @@ var styles = StyleSheet.create({
         bottom: 10
     },
     imageOverlay:{
-        width: 150,
-        height: 250,
+        width: 130,
+        height: 200,
         marginRight: 6,
         position: 'absolute',
         backgroundColor: '#000',
