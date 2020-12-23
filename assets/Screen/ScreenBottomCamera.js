@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TouchableOpacity, Text,Button,FlatList, Image, ImageBackground } from "react-native";
 import * as tf from "@tensorflow/tfjs";
 import { fetch, bundleResourceIO } from "@tensorflow/tfjs-react-native";
-import { BlurView } from "@react-native-community/blur";
+//import { BlurView } from "@react-native-community/blur";
 import Constants from "expo-constants";
-import { Camera } from 'expo-camera';
+//import { Camera } from 'expo-camera';
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-import { withNavigation } from 'react-navigation';
+//import { withNavigation } from 'react-navigation';
 import * as jpeg from "jpeg-js";
-import { Icon } from 'react-native-elements';
+//import { Icon } from 'react-native-elements';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick';
 
 import Output from "./Output";
@@ -185,24 +185,24 @@ export default function ScreenBottomCamera({navigation}) {
   );
 
   if (!error) {
-    if (isTfReady && model && !image && !predictions) {
-      status = "modelReady";
-      statusMessage = "Model is ready.";
-    } else if (model && image && predictions) {
-      status = "finished";
-      //statusMessage = "Prediction finished.";
-      showReset = true;
-    } else if (model && image && !predictions) {
-      status = "modelPredict";
-      statusMessage = "Model is predicting...";
-    } else {
-      status = "modelLoad";
-      statusMessage = "Model is loading...";
-    }
+      if (isTfReady && model && !image && !predictions) {
+        status = "modelReady";
+        statusMessage = "Model is ready.";
+      } else if (model && image && predictions) {
+        status = "finished";
+        //statusMessage = "Prediction finished.";
+        showReset = true;
+      } else if (model && image && !predictions) {
+        status = "modelPredict";
+        statusMessage = "Model is predicting...";
+      } else {
+        status = "modelLoad";
+        statusMessage = "Model is loading...";
+      }
   } else {
-    statusMessage = "Unexpected error occured.";
-    showReset = true;
-    console.log(error);
+      statusMessage = "Unexpected error occured.";
+      showReset = true;
+      console.log(error);
   }
  
 

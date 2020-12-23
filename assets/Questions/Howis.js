@@ -26,7 +26,7 @@ export default class Home extends React.Component{
                     {"\n"}{"\n"}To increase the accuracy further, your doctor may use a tool called a dermoscope. This tool is mainly used by dermatologists or other specifically trained medical professionals. The dermoscope is a specialised lens that can magnify the mole 15 – 25 times. This allows the doctor to see structures in the mole that cannot be seen with the naked eye. 
                     {"\n"}{"\n"}Since not all doctors are trained in dermoscopy, some doctors may choose to remove a mole without having this magnified look. They may instead choose to cut it out and send it directly for analysis or refer the patient to a specialized professional for further assessment. 
                     {"\n"}{"\n"}If your doctor informs you that the mole does not look alarming, you may choose to still keep an eye on it to see if it changes and get another assessment if it does. 
-                    {"\n"}{"\n"}You can use Miiskin to keep an eye on your moles to see if they change over time.
+                    {"\n"}{"\n"}You can use this app to keep an eye on your moles to see if they change over time.
                    </Text>
                </ScrollView>
             </View>

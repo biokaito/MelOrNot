@@ -54,7 +54,7 @@ const ScreenBottomHome = ({navigation}) => {
                         <View style={styles.darkOverlay}>
                             <View style={styles.headerText}>
                                 <Text style={styles.userGreet}>
-                                    Hello Triều,
+                                    Hello,
                                 </Text>
                                 <Text style={styles.userText}>
                                     How do you doing today?
@@ -161,11 +161,10 @@ var styles = StyleSheet.create({
         borderBottomColor: 'gray',
         borderBottomWidth: 0.5,
         padding: 20,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     questionText:{
         color:'gray',
-        marginRight: 45
     },
     bodyContainer:{
         height: 390,

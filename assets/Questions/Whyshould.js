@@ -25,7 +25,7 @@ export default class Home extends React.Component{
                         {"\n"}{"\n"}When melanoma is not caught early, the survival rates drop rapidly. 
                         {"\n"}{"\n"}The prospect of cancer can be scary, but melanoma's high survival rate when caught early is comforting. Do not be scared to look at your skin for changes. Do not be afraid to see a doctor with any concerns as early as possible. 
                         {"\n"}{"\n"}When it comes to finding melanomas, patients are often the ones to sound the alarm. Ordinary people can and should get better at noticing changes on their skin. 
-                        {"\n"}{"\n"}Keeping an eye on your skin is one way you can be proactive about your own health. That's why we like to refer to Miiskin's app as a lifestyle app. It's one out of many things you can do for your health. 
+                        {"\n"}{"\n"}Keeping an eye on your skin is one way you can be proactive about your own health. That's why we like to refer to its app as a lifestyle app. It's one out of many things you can do for your health. 
                         {"\n"}{"\n"}There are those who smoke and those who don't. Some eat a lot of greens and others don't. There are those who don't keep an eye on their skin regularly. We hope you'll empower yourself to take charge of your skin health and be one who does.
                    </Text>
                </ScrollView>

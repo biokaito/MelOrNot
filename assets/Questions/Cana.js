@@ -48,6 +48,7 @@ var styles = StyleSheet.create({
     },
     body:{
         paddingHorizontal: 15,
+        height: 500
     },
     content:{
         color: 'gray'
