@@ -120,7 +120,7 @@ var styles = StyleSheet.create({
     },
     headerText:{
         fontSize:25,
-        color: "#FFF",
+        color: "black",
         fontStyle: 'italic'
     },
     loading:{

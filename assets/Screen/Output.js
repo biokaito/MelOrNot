@@ -65,7 +65,12 @@ export default function Output(props) {
         </ImageBackground>
       );
     } else output = <ActivityIndicator size="large" animating={true} />;
-  } else output = <Text>Please try again</Text>;
+  } else output = 
+    <View style={styles.cantIdentify}>
+      <Text>Can't identify your image!</Text>
+      <Text>Please try again</Text>
+    </View> 
+  ;
 
   return output;
 }
@@ -76,6 +81,10 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  cantIdentify:{
+    //justifyContent: 'center'
+    alignItems: 'center'
   },
   placeholder: { 
     fontSize: 50 

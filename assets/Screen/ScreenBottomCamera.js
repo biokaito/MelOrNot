@@ -11,6 +11,8 @@ import * as ImagePicker from "expo-image-picker";
 import * as jpeg from "jpeg-js";
 //import { Icon } from 'react-native-elements';
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick';
+import AntDesign from '@expo/vector-icons/AntDesign'
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Output from "./Output";
 
@@ -73,6 +75,7 @@ export default function ScreenBottomCamera({navigation}) {
   const [image, setImage] = useState(null); 
   const [predictions, setPredictions] = useState(null); 
   const [error, setError] = useState(false); 
+  const [gallery, setGallery] = useState(null);
 
   const [definitions,setdefinitions] = useState([
     {   
@@ -156,8 +159,9 @@ export default function ScreenBottomCamera({navigation}) {
         allowsEditing: true, // on Android user can rotate and crop the selected image; iOS users can only crop
         quality: 1, // Chất lượng ảnh cao nhất
         aspect: [4, 3], // duy trì tỷ lệ chuẩn
+        //base64: true
       });
-
+      console.log(response.uri)
       if (!response.cancelled) {
         const source = { uri: response.uri };
         setImage(source); 
@@ -170,18 +174,54 @@ export default function ScreenBottomCamera({navigation}) {
       setError(error);
     }
   }
+  async function handlerCaptureImage(){
+    try{
+      let response = await ImagePicker.launchCameraAsync({
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+      });
+      console.log(response.uri)
+      if (!response.cancelled) {
+        const source = { uri: response.uri };
+        setImage(source); // put image path to the state
+        const imageTensor = await imageToTensor(source); // prepare the image
+        const predictions = await model.predict(imageTensor); // send the image to the model
+        setPredictions(predictions); // put model prediction to the state
+      }
+    } catch (error) {
+      setError(error);
+    }    
+  }
 
   function reset() {
     setPredictions(null);
     setImage(null);
     setError(false);
   }
+  
+   const _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('galleryhihi',image.uri
+      );
+      console.log(image)
+    } catch (error) {
+      // Error saving data
+    }
+  };
 
   let status, statusMessage, showReset;
   const resetLink = (
-      <Text onPress={reset} style={styles.reset}>
-          Prediction finished.
-      </Text>
+    <View style={styles.resetLink}>
+      <View>
+        <Text onPress={reset} style={styles.reset}>
+          Restart
+        </Text>
+      </View>
+      <View>
+        <Text style={styles.reset} onPress={_storeData}>Save it</Text>
+      </View>
+    </View>
   );
 
   if (!error) {
@@ -194,21 +234,28 @@ export default function ScreenBottomCamera({navigation}) {
         showReset = true;
       } else if (model && image && !predictions) {
         status = "modelPredict";
-        statusMessage = "Model is predicting...";
+        statusMessage = "Predicting...";
       } else {
         status = "modelLoad";
         statusMessage = "Model is loading...";
       }
   } else {
-      statusMessage = "Unexpected error occured.";
+      //statusMessage = "Can't identify your image!";
       showReset = true;
-      console.log(error);
+      console.log("loi la"+error);
   }
  
 
   return (
     <View style={styles.container}>        
-      <View style={styles.innercontainer}>        
+      <View  style={styles.camera}>       
+        <TouchableOpacity
+          onPress={model && !predictions ? handlerCaptureImage : () => {}}         
+        >
+          <AntDesign name="camerao" size={50} />
+        </TouchableOpacity>       
+      </View>
+      <View style={styles.innercontainer}>         
         <TouchableOpacity
           style={styles.imageContainer}
           onPress={model && !predictions ? handlerSelectImage : () => {}} // Activates handler only if the model has been loaded and there are no predictions done yet
@@ -219,19 +266,27 @@ export default function ScreenBottomCamera({navigation}) {
             predictions={predictions}
             error={error}
           />
-        </TouchableOpacity>
-        <Text style={styles.status}>          
-          <AwesomeButtonRick 
-            type="secondary"
-            width={250}
+        </TouchableOpacity>        
+        <Text style={styles.status}>
+          {statusMessage} {showReset ? resetLink : null}
+          
+        </Text>        
+      </View>      
+      <View style={styles.footer}>        
+        {
+         image ?
+         <View style={styles.yourImage}>
+          <Text style={styles.yourImageText}>Your image:</Text>
+          <Image
+            source={image}
+            style={styles.yourImageFooter}
           >
-            <Text>
-              {statusMessage} {showReset ? resetLink : null}
-            </Text>
-          </AwesomeButtonRick>
-        </Text>
+          </Image>
+         </View>
+        : null
+       }
       </View>
-      <View style={styles.Definitions}>
+      {/*<View style={styles.Definitions}>
       <Text style={{ marginLeft: 4,fontFamily: "Roboto-Bold", fontSize: 18, color: "black" }}>Definitions:</Text>
         <View>
           <FlatList
@@ -254,11 +309,10 @@ export default function ScreenBottomCamera({navigation}) {
                 </View>
               )
             }}
-          >
-            
+          >            
           </FlatList>
         </View>        
-      </View>
+          </View>*/}
     </View>
   );
 }
@@ -269,6 +323,40 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+  },
+  yourImageText:{
+    fontSize: 20,
+  },
+  yourImageFooter:{
+    height: 100, 
+    width: 100,
+    marginLeft: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'grey'
+  },
+  footer:{
+    height:140,
+    width:300, 
+    position: 'absolute',
+    bottom: 5, 
+    //backgroundColor:'red',
+    alignItems:'center',
+    justifyContent: 'center'
+  },
+  yourImage:{
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  camera:{
+    position: 'absolute',
+    top: 40,
+    right: 40
+  },
+  resetLink:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 200
   },
   flatList:{
     padding: 4,
@@ -287,15 +375,16 @@ const styles = StyleSheet.create({
     bottom: 20
   },
   innercontainer: {
-    marginTop: -50,
     alignItems: "center",
     justifyContent: "center",
   },
   status: { 
-    marginTop: 30,
+    marginTop: 20,
+    fontSize: 20
   },
   reset: { 
-    //color: "blue",
+    color: "blue",
+    fontSize: 20
   },
   imageContainer: {
     width: 350,
@@ -305,9 +394,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "lightgrey",
-    borderColor: "#495464",
-    borderWidth: 4,
-    borderStyle: "dotted",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
   },
   flatlistImage:{
     width: 50,
