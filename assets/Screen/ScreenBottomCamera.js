@@ -10,9 +10,8 @@ import * as ImagePicker from "expo-image-picker";
 //import { withNavigation } from 'react-navigation';
 import * as jpeg from "jpeg-js";
 //import { Icon } from 'react-native-elements';
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick';
 import AntDesign from '@expo/vector-icons/AntDesign'
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Output from "./Output";
 
@@ -22,6 +21,9 @@ async function getPermissionAsync() {
   if (Constants.platform.ios) {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status !== "granted") {
+      alert("Permission for camera access required.");
+    }const { statusCam } = await Permissions.askAsync(Permissions.CAMERA);
+    if (statusCam !== "granted") {
       alert("Permission for camera access required.");
     }
   }
@@ -75,7 +77,8 @@ export default function ScreenBottomCamera({navigation}) {
   const [image, setImage] = useState(null); 
   const [predictions, setPredictions] = useState(null); 
   const [error, setError] = useState(false); 
-  const [gallery, setGallery] = useState(null);
+  const [singleImage, setsingleImage] = useState({});
+  const [gallery, setGallery] = useState([]);
 
   const [definitions,setdefinitions] = useState([
     {   
@@ -161,14 +164,14 @@ export default function ScreenBottomCamera({navigation}) {
         aspect: [4, 3], // duy trì tỷ lệ chuẩn
         //base64: true
       });
-      console.log(response.uri)
+      //console.log(response.uri)
       if (!response.cancelled) {
         const source = { uri: response.uri };
         setImage(source); 
         const imageTensor = await imageToTensor(source); 
         const predictions = await model.predict(imageTensor); // send the image to the model
         setPredictions(predictions); 
-        //console.log(predictions)
+        //console.log(response.uri)
       }
     } catch (error) {
       setError(error);
@@ -181,7 +184,7 @@ export default function ScreenBottomCamera({navigation}) {
           aspect: [4, 3],
           quality: 1,
       });
-      console.log(response.uri)
+      //console.log(response.uri)
       if (!response.cancelled) {
         const source = { uri: response.uri };
         setImage(source); // put image path to the state
@@ -194,20 +197,32 @@ export default function ScreenBottomCamera({navigation}) {
     }    
   }
 
-  function reset() {
+  async function reset() {
     setPredictions(null);
     setImage(null);
     setError(false);
   }
   
-   const _storeData = async () => {
+  const _storeData = async () => {
     try {
-      await AsyncStorage.setItem('galleryhihi',image.uri
+       gallery.push({source: image.uri, 
+        akiec: Math.round(predictions.dataSync()[0] * 100),
+        bcc: Math.round(predictions.dataSync()[1] * 100),
+        bkl: Math.round(predictions.dataSync()[2] * 100),
+        df: Math.round(predictions.dataSync()[3] * 100),
+        melanoma: Math.round(predictions.dataSync()[4] * 100),
+        nv: Math.round(predictions.dataSync()[5] * 100),
+        vasc: Math.round(predictions.dataSync()[6] * 100),
+      })
+      await AsyncStorage.setItem(
+        '@MyGallery',
+        JSON.stringify(gallery)
       );
-      console.log(image)
     } catch (error) {
       // Error saving data
+      console.log('lỗi: '+e)
     }
+    console.log(gallery)
   };
 
   let status, statusMessage, showReset;
@@ -242,7 +257,7 @@ export default function ScreenBottomCamera({navigation}) {
   } else {
       //statusMessage = "Can't identify your image!";
       showReset = true;
-      console.log("loi la"+error);
+      //console.log("loi la"+error);
   }
  
 

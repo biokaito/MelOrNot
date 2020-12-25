@@ -4,7 +4,7 @@ import { StyleSheet, Text, View,TextInput,TouchableOpacity,Image } from 'react-n
 //import EStyleSheet from 'react-native-extended-stylesheet'
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import Modal from 'react-native-modal';
 
 export default function AccountScreen(props) {
@@ -15,32 +15,32 @@ export default function AccountScreen(props) {
     { title: 'Do love you', description: 'thì chỉ có ăn cức ăn đầu buổi, NHÁ', category: 'work', priority: 'Fast', status: 'Processing', date: '20/10/2020' },
     { title: 'Do love you', description: 'thì chỉ có ăn cức ăn đầu buổi, NHÁ', category: 'work', priority: 'Fast', status: 'Processing', date: '20/10/2020' },
   ]
-  const [image,setImage] = useState();
+  const [gallery,setGallery] = useState([]);
 
-  useEffect(() => {
-    try{
-      const value =  AsyncStorage.getItem('galleryhihi');
-      if(value !== null){
-        console.log('giá trị value:'+value)
-        setImage(value.uri)
+  const _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@MyGallery');
+      if (value !== null) {
+        // We have data!!
+        //console.log(value);
+        setGallery(JSON.parse(value))
       }
+    } catch (error) {
+      // Error retrieving data
+      console.log(e)
     }
-    catch(err){
-
-    };
- 
-  }, [])
+    console.log(gallery[0].melanoma)
+  };
+  
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.wrapper1}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>HISTORY</Text>
-          <Image 
-            source={image}
-            style={{height: 40,width:40}}
-          />
+          <TouchableOpacity onPress={_retrieveData}>
+            <Text style={styles.headerText}>HISTORY</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.wrapper2}>
@@ -54,16 +54,16 @@ export default function AccountScreen(props) {
         </View>
         <ScrollView>
           <FlatList 
-            data={listNote}
+            data={gallery}
             renderItem={({item})=>{
               return(
                 <View style={styles.wrapper}>
                   <View style={styles.headerComponent}>
                     <View style={styles.titleStyle}>
-                      <Text style={styles.titleText}>{item.title}</Text>
+                      <Text style={styles.titleText}>{item.akiec}</Text>
                     </View>
                     <View style={styles.categoryStyle}>
-                      <Text style={styles.categoryText}>{item.category}</Text>
+                      <Text style={styles.categoryText}>{item.bcc}</Text>
                     </View>
                   </View>
                   <View style={styles.middleComponent}>
@@ -71,11 +71,11 @@ export default function AccountScreen(props) {
                       <ScrollView
                         style={styles.desScrollView}
                       >
-                        <Text style={styles.desText}>{item.description}</Text>
+                        <Image source={{uri: item.source}} style={{height: 50,width:50}} />
                       </ScrollView>
                     </View>
                     <View style={styles.dateStyle}>
-                      <Text style={styles.dateText}>{item.date}</Text>
+                      <Text style={styles.dateText}>{item.df}</Text>
                     </View>
                   </View>
                   <View style={styles.crossbar}>
@@ -83,10 +83,10 @@ export default function AccountScreen(props) {
                   </View>
                   <View style={styles.bottomComponent}>
                     <View  style={styles.priStyle}>
-                      <Text style={styles.categoryText}>{item.priority}</Text>
+                      <Text style={styles.categoryText}>{item.melanoma}</Text>
                     </View>
                     <View  style={styles.sttStyle}>
-                      <Text style={styles.categoryText}>{item.status}</Text>
+                      <Text style={styles.categoryText}>{item.nv}</Text>
                     </View>
                   </View>
                 </View>
