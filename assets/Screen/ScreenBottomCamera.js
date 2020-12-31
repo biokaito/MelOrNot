@@ -2,20 +2,21 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TouchableOpacity, Text,Button,FlatList, Image, ImageBackground } from "react-native";
 import * as tf from "@tensorflow/tfjs";
 import { fetch, bundleResourceIO } from "@tensorflow/tfjs-react-native";
-//import { BlurView } from "@react-native-community/blur";
 import Constants from "expo-constants";
-//import { Camera } from 'expo-camera';
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-//import { withNavigation } from 'react-navigation';
 import * as jpeg from "jpeg-js";
-//import { Icon } from 'react-native-elements';
-import AntDesign from '@expo/vector-icons/AntDesign'
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//import { Icon } from 'react-native-elements';
+//import { BlurView } from "@react-native-community/blur";
+//import { withNavigation } from 'react-navigation';
+//import { Camera } from 'expo-camera';
 
 import Output from "./Output";
 
-
+var id = 0;
 
 async function getPermissionAsync() {
   if (Constants.platform.ios) {
@@ -64,7 +65,7 @@ async function imageToTensor(source) {
   );
   const resized_img = tf.image.resizeBilinear(sliced_img, [224, 224]);
 
-  // thêm demension thứ 4 vào tensor
+  // thêm dimension thứ 4 vào tensor
   const expanded_img = resized_img.expandDims(0);
 
   // chuẩn hóa các giá trị rgb thành -1-+1
@@ -78,7 +79,22 @@ export default function ScreenBottomCamera({navigation}) {
   const [predictions, setPredictions] = useState(null); 
   const [error, setError] = useState(false); 
   const [singleImage, setsingleImage] = useState({});
-  const [gallery, setGallery] = useState([]);
+  const [gallery, setGallery] = useState({
+    source: '', 
+    akiec: '',
+    bcc: '',
+    bkl: '',
+    df: '',
+    melanoma: '',
+    nv: '',
+    vasc: '',
+    date : '',
+    time : '',
+    id : ''
+  });
+  const [isSave, setIsSave] = useState(false);
+  const [currentDate, setCurrentDate] = useState('');
+  const [currrentTime, setCurrentTime] = useState('');
 
   const [definitions,setdefinitions] = useState([
     {   
@@ -143,7 +159,7 @@ export default function ScreenBottomCamera({navigation}) {
     (async () => {
       await tf.ready(); 
       setTfReady(true); 
-
+      
       // khai báo và load model custom
       const model = require("./Model/NewModel1/model.json");
       const weights = require("./Model/NewModel1/weights.bin");
@@ -152,6 +168,19 @@ export default function ScreenBottomCamera({navigation}) {
       );
       setModel(loadedModel); 
       getPermissionAsync(); 
+
+      var date = new Date().getDate(); //Current Date
+      var month = new Date().getMonth() + 1; //Current Month
+      var year = new Date().getFullYear(); //Current Year
+      setCurrentDate(
+        date + '/' + month + '/' + year 
+      );
+      var hours = new Date().getHours(); //Current Hours
+      var min = new Date().getMinutes(); //Current Minutes
+      var sec = new Date().getSeconds(); 
+      setCurrentTime(
+        hours + ':' + min + ':' + sec
+      );
     })();
   }, []);
   
@@ -204,8 +233,21 @@ export default function ScreenBottomCamera({navigation}) {
   }
   
   const _storeData = async () => {
-    try {
-       gallery.push({source: image.uri, 
+      var date = new Date().getDate(); //Current Date
+      var month = new Date().getMonth() + 1; //Current Month
+      var year = new Date().getFullYear(); //Current Year
+      setCurrentDate(
+        date + '/' + month + '/' + year 
+      );
+      var hours = new Date().getHours(); //Current Hours
+      var min = new Date().getMinutes(); //Current Minutes
+      var sec = new Date().getSeconds(); 
+      setCurrentTime(
+        hours + ':' + min + ':' + sec
+      );
+       id = id + 1
+        setGallery({
+        source: image.uri, 
         akiec: Math.round(predictions.dataSync()[0] * 100),
         bcc: Math.round(predictions.dataSync()[1] * 100),
         bkl: Math.round(predictions.dataSync()[2] * 100),
@@ -213,29 +255,51 @@ export default function ScreenBottomCamera({navigation}) {
         melanoma: Math.round(predictions.dataSync()[4] * 100),
         nv: Math.round(predictions.dataSync()[5] * 100),
         vasc: Math.round(predictions.dataSync()[6] * 100),
+        date : currentDate,
+        time : currrentTime,
+        id : id
       })
-      await AsyncStorage.setItem(
-        '@MyGallery',
-        JSON.stringify(gallery)
-      );
-    } catch (error) {
-      // Error saving data
-      console.log('lỗi: '+e)
-    }
+    setIsSave(!isSave)
+    reset()
     console.log(gallery)
+    navigation.navigate('Repo',{
+      gallery: {
+        source: image.uri, 
+        akiec: Math.round(predictions.dataSync()[0] * 100),
+        bcc: Math.round(predictions.dataSync()[1] * 100),
+        bkl: Math.round(predictions.dataSync()[2] * 100),
+        df: Math.round(predictions.dataSync()[3] * 100),
+        melanoma: Math.round(predictions.dataSync()[4] * 100),
+        nv: Math.round(predictions.dataSync()[5] * 100),
+        vasc: Math.round(predictions.dataSync()[6] * 100),
+        date : currentDate,
+        time : currrentTime,
+        id : id
+      }
+    })
+    
   };
 
   let status, statusMessage, showReset;
   const resetLink = (
     <View style={styles.resetLink}>
       <View>
-        <Text onPress={reset} style={styles.reset}>
-          Restart
-        </Text>
+        <TouchableOpacity onPress={reset} style={styles.restartButton}>
+          <Text style={styles.reset}>
+            Restart
+          </Text>
+        </TouchableOpacity>
       </View>
-      <View>
-        <Text style={styles.reset} onPress={_storeData}>Save it</Text>
-      </View>
+      {
+        !error?
+        <View>
+          <TouchableOpacity style={styles.restartButton} onPress={_storeData}>
+            <Text style={styles.reset} >Save</Text>
+          </TouchableOpacity>
+        </View>
+        :
+        null
+      }
     </View>
   );
 
@@ -263,11 +327,19 @@ export default function ScreenBottomCamera({navigation}) {
 
   return (
     <View style={styles.container}>        
-      <View  style={styles.camera}>       
+        <View  style={styles.camera}>       
         <TouchableOpacity
           onPress={model && !predictions ? handlerCaptureImage : () => {}}         
         >
           <AntDesign name="camerao" size={50} />
+        </TouchableOpacity>       
+      </View>
+      <View  style={styles.repo}>       
+        <TouchableOpacity
+          //onPress={model && !predictions ? handlerCaptureImage : () => {}}         
+          onPress={()=>{navigation.navigate('Repo')}}
+        >
+          <AntDesign name="folder1" size={50} />
         </TouchableOpacity>       
       </View>
       <View style={styles.innercontainer}>         
@@ -301,6 +373,17 @@ export default function ScreenBottomCamera({navigation}) {
         : null
        }
       </View>
+      <Modal isVisible={isSave} onBackdropPress={() => {setIsSave(!isSave)}}>
+          <View style={styles.containerAlert}>
+            <Image 
+                source={require('../src/images/tick.png')}
+                style={styles.imageAlert}
+            />
+            <Text style={styles.nameAlert}>Saved!</Text>
+          </View>
+        </Modal>
+
+
       {/*<View style={styles.Definitions}>
       <Text style={{ marginLeft: 4,fontFamily: "Roboto-Bold", fontSize: 18, color: "black" }}>Definitions:</Text>
         <View>
@@ -339,6 +422,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
   },
+  restartButton:{
+    //backgroundColor: 'black',
+    padding: 3,
+  },
   yourImageText:{
     fontSize: 20,
   },
@@ -367,6 +454,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 40,
     right: 40
+  },  
+  repo:{
+    position: 'absolute',
+    top: 40,
+    left: 40
   },
   resetLink:{
     flexDirection: 'row',
@@ -399,7 +491,9 @@ const styles = StyleSheet.create({
   },
   reset: { 
     color: "blue",
-    fontSize: 20
+    fontSize: 20,
+    
+    fontFamily: 'HelveticaNeue-Bold'
   },
   imageContainer: {
     width: 350,
@@ -431,5 +525,24 @@ flatlistTitle:{
     fontSize: 14,
     left: "25%",
     bottom: 0
+},
+containerAlert: {
+  backgroundColor: '#fff',
+  borderRadius: 25,
+  justifyContent: 'center',
+  height: 200,
+  width: 200,
+  alignSelf: 'center'
+},
+imageAlert: {
+    height: 80,
+    width: 80,
+    alignSelf: 'center',
+    marginBottom: 20,
+},
+nameAlert: {
+    fontWeight: '500',
+    fontSize: 20,
+    textAlign: 'center',
 },
 });

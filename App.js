@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {Ionicons} from '@expo/vector-icons';
 
-import HomeScreen from './assets/Screen/Home';
+import Repo from './assets/Screen/Repo';
 import IntroScreen from './assets/Screen/Intro';
 import MainScreen from './assets/Screen/Main';
 import CameraScreen from './assets/Screen/Camera'
@@ -26,7 +26,6 @@ import BottomTabUser from './assets/Screen/ScreenBottomUser';
 const tabNavigator = createBottomTabNavigator({
   Home: createStackNavigator({
     Home: BottomTabHome,
-    HomeScreen: HomeScreen,
     Can: Cana,
     How: Howis,
     Regularly: Howoften,
@@ -39,7 +38,8 @@ const tabNavigator = createBottomTabNavigator({
   }),
   Camera: createStackNavigator({
     Camera: BottomTabCamera,
-    Definitions: DefinitionScreen
+    Definitions: DefinitionScreen,
+    Repo: Repo
   }),
   Chat: createStackNavigator({
     Chat: BottomTabChat,

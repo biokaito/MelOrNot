@@ -14,7 +14,13 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 
 const image = { uri: "https://images.pexels.com/photos/227417/pexels-photo-227417.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" };
 
+
 const ScreenBottomHome = ({navigation}) => {
+    const [isSeenWhy,setIsSeenWhy] = useState(false);
+    const [isSeenCana,setIsSeenCana] = useState(false);
+    const [isSeenHowis,setIsSeenHowis] = useState(false);
+    const [isSeenWhat,setIsSeenWhat] = useState(false);
+    const [isSeenWhatS,setIsSeenWhatS] = useState(false);
     const [gallery,setgallery] = useState([
         {
             image : require("../src/images/1.png"),
@@ -49,7 +55,7 @@ const ScreenBottomHome = ({navigation}) => {
                     <ImageBackground
                         source={image}
                         style={{width: '100%',height: 250}}
-                        imageStyle={{borderBottomRightRadius:150}}
+                        imageStyle={{borderBottomRightRadius:110}}
                     >
                         <View style={styles.darkOverlay}>
                             <View style={styles.headerText}>
@@ -104,34 +110,75 @@ const ScreenBottomHome = ({navigation}) => {
                         </View>
                         <View>
                             <Text style={styles.titleQuestion}>Learn</Text>
-                            <TouchableOpacity onPress={()=>navigation.navigate("Why")}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate("Why"),setIsSeenWhy({isSeenWhy: true})}}>
                                 <View style={styles.questionContainer}>
-                                    <Text style={styles.questionText}>Why should you keep an eye on your skin?</Text>
-                                    <AntDesign name="right" size={20}/>
+                                    <View>
+                                        <Text style={styles.questionText}>Why should you keep an eye on your skin?</Text>
+                                    </View>
+                                    <View>
+                                        {isSeenWhy==false?
+                                        <AntDesign name="right" size={20}/>
+                                        :
+                                        <AntDesign name="check" size={20}/>
+                                        }
+                                        
+                                    </View>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>navigation.navigate("Can")}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate("Can"),setIsSeenCana({isSeenCana: true})}}>
                                 <View style={styles.questionContainer}>
-                                    <Text style={styles.questionText}>Can a smartphone app diagnose melanoma skin cancer?</Text>
-                                    <AntDesign name="right" size={20}/>
+                                    <View>
+                                        <Text style={styles.questionText}>Can a smartphone app diagnose melanoma skin cancer?</Text>
+                                    </View>
+                                    <View>
+                                        {isSeenCana==false?
+                                        <AntDesign name="right" size={20}/>
+                                        :
+                                        <AntDesign name="check" size={20}/>
+                                        }
+                                    </View>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>navigation.navigate("How")}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate("How"),setIsSeenHowis({isSeenHowis: true})}}>
                                 <View style={styles.questionContainer}>
-                                    <Text style={styles.questionText}>How is melanoma skin cancer diagnosed?</Text>
-                                    <AntDesign name="right" size={20}/>
+                                    <View>
+                                        <Text style={styles.questionText}>How is melanoma skin cancer diagnosed?</Text>
+                                    </View>
+                                    <View>
+                                        {isSeenHowis==false?
+                                        <AntDesign name="right" size={20}/>
+                                        :
+                                        <AntDesign name="check" size={20}/>
+                                        }
+                                    </View>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>navigation.navigate("What")}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate("What"),setIsSeenWhat({isSeenWhat: true})}}>
                                 <View style={styles.questionContainer}>
-                                    <Text style={styles.questionText}>What skin cancer risk factors should you be aware of?</Text>
-                                    <AntDesign name="right" size={20}/>
+                                    <View>
+                                        <Text style={styles.questionText}>What skin cancer risk factors should you be aware of?</Text>
+                                    </View>
+                                    <View>
+                                    {isSeenWhat==false?
+                                        <AntDesign name="right" size={20}/>
+                                        :
+                                        <AntDesign name="check" size={20}/>
+                                        }
+                                    </View>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>navigation.navigate("Regularly")}>
+                            <TouchableOpacity onPress={()=>{navigation.navigate("Regularly"),setIsSeenWhatS({isSeenWhatS: true})}}>
                                 <View style={styles.questionContainer}>
-                                    <Text style={styles.questionText}>How often should you keep an eye on your skin?</Text>
-                                    <AntDesign name="right" size={20}/>
+                                    <View>
+                                        <Text style={styles.questionText}>How often should you keep an eye on your skin?</Text>
+                                    </View>
+                                    <View>
+                                    {isSeenWhatS==false?
+                                        <AntDesign name="right" size={20}/>
+                                        :
+                                        <AntDesign name="check" size={20}/>
+                                        }
+                                    </View>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -162,16 +209,18 @@ var styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         padding: 20,
         alignItems: 'center',
+        justifyContent: 'space-between'
     },
     questionText:{
         color:'gray',
+        width: 290
     },
     bodyContainer:{
         height: 390,
     },
     flatlistImage:{
-        width: 130,
-        height: 200,
+        width: 120,
+        height: 140,
         marginRight: 0,
         borderRadius: 20
     },
@@ -184,8 +233,8 @@ var styles = StyleSheet.create({
         bottom: 10
     },
     imageOverlay:{
-        width: 130,
-        height: 200,
+        width: 120,
+        height: 140,
         marginRight: 6,
         position: 'absolute',
         backgroundColor: '#000',
@@ -193,8 +242,8 @@ var styles = StyleSheet.create({
         borderRadius: 20
     },
     flatlistImageWrapper:{
-        paddingVertical: 15,
-        paddingLeft: 16,
+        paddingVertical: 10,
+        paddingLeft: 8,
     },
     inputBox:{
         marginTop: 20,
@@ -217,7 +266,7 @@ var styles = StyleSheet.create({
         height: 250,
         backgroundColor: "#000",
         opacity: 0.4,
-        borderBottomRightRadius: 150,
+        borderBottomRightRadius: 110,
     },
     userGreet:{
         fontSize: 38,
