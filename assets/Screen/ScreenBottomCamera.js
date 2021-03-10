@@ -23,7 +23,8 @@ async function getPermissionAsync() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status !== "granted") {
       alert("Permission for camera access required.");
-    }const { statusCam } = await Permissions.askAsync(Permissions.CAMERA);
+    }
+    const { statusCam } = await Permissions.askAsync(Permissions.CAMERA);
     if (statusCam !== "granted") {
       alert("Permission for camera access required.");
     }
